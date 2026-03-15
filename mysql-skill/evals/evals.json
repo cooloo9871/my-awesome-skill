@@ -1,0 +1,11 @@
+{
+  "skill_name": "mysql-skill",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "請幫我用 mysql-skill 產生 mysql 的 k8s manifests。",
+      "expected_output": "A multi-document YAML with Secret (mysql-secret), Headless Service (mysql-headless), and StatefulSet (mysql) with hostNetwork: true.",
+      "files": []
+    }
+  ]
+}
