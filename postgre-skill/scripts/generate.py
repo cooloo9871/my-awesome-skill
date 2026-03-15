@@ -2,14 +2,32 @@ import random
 import string
 import sys
 import base64
+import subprocess
 
 def generate_password(length=16):
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for i in range(length))
 
+def get_default_storage_class():
+    try:
+        # Try to get the default storage class
+        cmd = "kubectl get sc -o jsonpath='{.items[?(@.metadata.annotations.storageclass\\.kubernetes\\.io/is-default-class==\"true\")].metadata.name}'"
+        sc = subprocess.check_output(cmd, shell=True).decode().strip()
+        if sc:
+            return sc
+
+        # If no default, just pick the first one available
+        cmd = "kubectl get sc -o jsonpath='{.items[0].metadata.name}'"
+        sc = subprocess.check_output(cmd, shell=True).decode().strip()
+        return sc
+    except Exception:
+        return None
+
 def generate_yaml(storage_size="100Gi", image="postgres:15-alpine", namespace="postgre"):
     password = generate_password()
     encoded_password = base64.b64encode(password.encode()).decode()
+
+    storage_class = get_default_storage_class()
 
     yaml_content = f"""---
 apiVersion: v1
@@ -37,7 +55,10 @@ spec:
   clusterIP: None
   selector:
     app: postgre
+"""
 
+    if not storage_class:
+        yaml_content += f"""
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -54,7 +75,9 @@ spec:
   claimRef:
     name: postgre-data-postgre-0
     namespace: {namespace}
+"""
 
+    yaml_content += f"""
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -93,6 +116,7 @@ spec:
       name: postgre-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
+      {f"storageClassName: {storage_class}" if storage_class else ""}
       resources:
         requests:
           storage: {storage_size}
