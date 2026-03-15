@@ -7,7 +7,7 @@ def generate_password(length=16):
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for i in range(length))
 
-def generate_yaml(storage_size="10Gi", image="postgres:15-alpine"):
+def generate_yaml(storage_size="100Gi", image="postgres:15-alpine"):
     password = generate_password()
     encoded_password = base64.b64encode(password.encode()).decode()
     
@@ -80,6 +80,6 @@ spec:
     return yaml_content
 
 if __name__ == "__main__":
-    storage = sys.argv[1] if len(sys.argv) > 1 else "10Gi"
+    storage = sys.argv[1] if len(sys.argv) > 1 else "100Gi"
     image = sys.argv[2] if len(sys.argv) > 2 else "postgres:15-alpine"
     print(generate_yaml(storage, image))
