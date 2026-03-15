@@ -15,8 +15,10 @@ This skill provides a standardized way to generate Kubernetes manifests for the 
 - **Deployment Name**: MUST be `bobo`.
 - **Image**: MUST be `quay.io/cooloo9871/bobo:latest`.
 - **Replicas**: MUST be `2`.
+- **Container Port**: MUST be `3000`.
 - **Service Name**: MUST be `bobo-svc`.
 - **Service Type**: MUST be `ClusterIP`.
+- **Service Port**: MUST be `3000`.
 
 ## Implementation Guide
 When triggered:

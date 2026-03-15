@@ -22,7 +22,7 @@ spec:
       - name: bobo
         image: {image}
         ports:
-        - containerPort: 80
+        - containerPort: 3000
           name: http
 
 ---
@@ -35,8 +35,8 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 80
-    targetPort: 80
+  - port: 3000
+    targetPort: 3000
     protocol: TCP
     name: http
   selector:
