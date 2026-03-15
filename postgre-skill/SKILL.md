@@ -4,8 +4,9 @@ description: |
   A skill for generating standardized PostgreSQL Kubernetes manifests.
   It produces a StatefulSet named 'postgre' with hostNetwork enabled,
   a headless service named 'postgre-headless', and a secret 'postgre-secret'
-  with a randomly generated password. This skill handles both MySQL (as requested by naming conventions)
-  and PostgreSQL deployments following the exact naming structure provided by the user.
+  with a randomly generated password.
+  It automatically detects and uses the cluster's StorageClass if available,
+  otherwise it falls back to a manual PersistentVolume.
   Make sure to use this skill whenever the user mentions postgre or standardized db setup.
 ---
 
@@ -18,7 +19,9 @@ This skill generates a complete set of Kubernetes manifests for a PostgreSQL dep
 - **Network Requirement**: `hostNetwork: true` MUST be set in the Pod spec.
 - **Service Requirement**: A headless service named `postgre-headless` MUST be created.
 - **Secret Requirement**: A secret named `postgre-secret` MUST be created with a random `POSTGRES_PASSWORD`.
-- **Storage Requirement**: PV/PVC MUST be managed via `volumeClaimTemplates` in the StatefulSet. A default `PersistentVolume` (PV) of 100Gi MUST be included as a fallback for the generated PVC (`postgre-data-postgre-0`).
+- **Storage Requirement**: PV/PVC MUST be managed via `volumeClaimTemplates` in the StatefulSet.
+  - If a `StorageClass` exists in the cluster, it will be used.
+  - If NO `StorageClass` is available, a manual `PersistentVolume` (PV) of the requested size MUST be included as a fallback for the generated PVC (`postgre-data-postgre-0`).
 - **Namespace**: Default to `postgre`.
 
 ## Implementation Guide
@@ -29,4 +32,4 @@ When triggered:
 
 ## Example Request
 **User:** "幫我產生一個標準的 postgre 部署設定"
-**Result:** Displays the YAML with postgre Secret, Service, and StatefulSet with hostNetwork.
+**Result:** Displays the YAML with postgre Secret, Service, and StatefulSet with hostNetwork and appropriate storage configuration.
