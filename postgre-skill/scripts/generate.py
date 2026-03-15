@@ -23,11 +23,17 @@ def get_default_storage_class():
     except Exception:
         return None
 
-def generate_yaml(storage_size="100Gi", image="postgres:15-alpine", namespace="postgre"):
+def generate_yaml(storage_size="100Gi", image="postgres:16", namespace="postgre"):
     password = generate_password()
     encoded_password = base64.b64encode(password.encode()).decode()
 
     storage_class = get_default_storage_class()
+
+    # PostgreSQL 18+ (and latest) requires /var/lib/postgresql
+    # Older versions use /var/lib/postgresql/data
+    mount_path = "/var/lib/postgresql/data"
+    if "latest" in image or any(f":{v}" in image for v in range(18, 30)):
+        mount_path = "/var/lib/postgresql"
 
     yaml_content = f"""---
 apiVersion: v1
@@ -110,7 +116,7 @@ spec:
               key: POSTGRES_PASSWORD
         volumeMounts:
         - name: postgre-data
-          mountPath: /var/lib/postgresql/data
+          mountPath: {mount_path}
   volumeClaimTemplates:
   - metadata:
       name: postgre-data
@@ -125,6 +131,6 @@ spec:
 
 if __name__ == "__main__":
     storage = sys.argv[1] if len(sys.argv) > 1 else "100Gi"
-    image = sys.argv[2] if len(sys.argv) > 2 else "postgres:15-alpine"
+    image = sys.argv[2] if len(sys.argv) > 2 else "postgres:16"
     namespace = sys.argv[3] if len(sys.argv) > 3 else "postgre"
     print(generate_yaml(storage, image, namespace))
