@@ -1,0 +1,11 @@
+{
+  "skill_name": "bobo-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "幫我產生一個標準的 bobo 部署設定",
+      "expected_output": "應生成包含 Deployment (名為 bobo, 2 副本, 映像檔 quay.io/cooloo9871/bobo:latest) 與 Service (名為 bobo-svc, ClusterIP) 的 YAML。",
+      "files": []
+    }
+  ]
+}

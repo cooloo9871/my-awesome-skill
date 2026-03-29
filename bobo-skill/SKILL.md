@@ -1,31 +1,31 @@
 ---
 name: bobo-skill
 description: |
-  A skill for generating standardized Kubernetes manifests for the 'bobo' application. 
-  It produces a Deployment named 'bobo' with 2 replicas using image 'quay.io/cooloo9871/bobo:latest', 
-  and a ClusterIP Service named 'bobo-svc'. 
-  Use this skill whenever the user mentions 'bobo', 'bobo deployment', or 'bobo-svc'.
+  這是一個用於為 'bobo' 應用程式生成標準化 Kubernetes Manifest 的技能。
+  它會生成一個名為 'bobo' 的 Deployment（包含 2 個副本），使用 'quay.io/cooloo9871/bobo:latest' 映像檔，
+  以及一個名為 'bobo-svc' 的 ClusterIP Service。
+  每當使用者提到 'bobo'、'bobo 部署' 或 'bobo-svc' 時，務必使用此技能。
 ---
 
-# Bobo Kubernetes Standard Skill
+# Bobo Kubernetes 標準佈署技能
 
-This skill provides a standardized way to generate Kubernetes manifests for the `bobo` application, following strict naming and configuration requirements.
+此技能可根據嚴格的命名與設定要求，為 `bobo` 應用程式生成標準化 Kubernetes Manifest。
 
-## Specifications
-- **Deployment Name**: MUST be `bobo`.
-- **Image**: MUST be `quay.io/cooloo9871/bobo:latest`.
-- **Replicas**: MUST be `2`.
-- **Container Port**: MUST be `3000`.
-- **Service Name**: MUST be `bobo-svc`.
-- **Service Type**: MUST be `ClusterIP`.
-- **Service Port**: MUST be `3000`.
+## 規格要求
+- **Deployment 名稱**：必須為 `bobo`。
+- **映像檔 (Image)**：必須為 `quay.io/cooloo9871/bobo:latest`。
+- **副本數 (Replicas)**：必須為 `2`。
+- **容器埠號 (Container Port)**：必須為 `3000`。
+- **Service 名稱**：必須為 `bobo-svc`。
+- **Service 類型**：必須為 `ClusterIP`。
+- **Service 埠號**：必須為 `3000`。
 
-## Implementation Guide
-When triggered:
-1. Identify if the user wants custom replicas or image (though defaults are standardized).
-2. Execute the generator: `python ~/.agents/skills/bobo-skill/scripts/generate_bobo.py [image] [replicas]`.
-3. Provide the output YAML to the user.
+## 實作指南
+當觸發此技能時：
+1. 確認使用者是否需要自定義副本數或映像檔 (雖然預設值為標準配置)。
+2. 執行產生器腳本：`python ~/.agents/skills/bobo-skill/scripts/generate_bobo.py [image] [replicas]`。
+3. 將生成的 YAML 內容提供給使用者。
 
-## Example Request
-**User:** "幫我產生一個 bobo 部署設定"
-**Result:** Displays the YAML with bobo Deployment (2 pods) and bobo-svc (ClusterIP).
+## 範例請求
+**使用者：** "幫我產生一個 bobo 部署設定"
+**結果：** 顯示包含 bobo Deployment (2 個 pod) 與 bobo-svc (ClusterIP) 的 YAML。
