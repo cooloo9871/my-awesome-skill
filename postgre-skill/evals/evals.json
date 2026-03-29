@@ -1,0 +1,17 @@
+{
+  "skill_name": "postgre-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "幫我產生一個標準的 postgre 部署設定，使用 postgres:15 映像檔，儲存大小為 50Gi。",
+      "expected_output": "應生成包含 StatefulSet (名為 postgre, hostNetwork: true, mountPath: /var/lib/postgresql/data), Service (名為 postgre-headless), 以及 Secret (名為 postgre-secret) 的 YAML，且儲存大小為 50Gi。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "產生一個 PostgreSQL 18 的佈署，儲存空間 200Gi。",
+      "expected_output": "應生成包含 StatefulSet (mountPath: /var/lib/postgresql), Service, 以及 Secret 的 YAML，儲存大小為 200Gi。",
+      "files": []
+    }
+  ]
+}
